@@ -1,0 +1,92 @@
+
+<?php /*  Page title  */ ?>
+<?php $__env->startSection('title'); ?>
+<?php echo $post->title; ?> ::
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /*  Update the Meta Title  */ ?>
+<?php $__env->startSection('meta_title'); ?>
+
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /*  Update the Meta Description  */ ?>
+<?php $__env->startSection('meta_description'); ?>
+
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /*  Update the Meta Keywords  */ ?>
+<?php $__env->startSection('meta_keywords'); ?>
+
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /*  Page content  */ ?>
+<?php $__env->startSection('content'); ?>
+<h3><?php echo $post->title; ?></h3>
+
+<p><?php echo $post->content(); ?></p>
+
+<div>
+	<span class="badge badge-info" title="<?php echo $post->created_at; ?>">Posted <?php echo $post->created_at->diffForHumans(); ?></span>
+</div>
+
+<hr />
+
+<a id="comments"></a>
+<h4><?php echo $comments->count(); ?> Comments</h4>
+
+<?php if ($comments->count()): ?>
+<?php foreach ($comments as $comment): ?>
+<div class="row">
+	<div class="span1">
+		<img class="thumbnail" src="<?php echo $comment->author->gravatar(); ?>" alt="">
+	</div>
+	<div class="span11">
+		<div class="row">
+			<div class="span11">
+				<span class="muted"><?php echo $comment->author->fullName(); ?></span>
+				&bull;
+				<span title="<?php echo $comment->created_at; ?>"><?php echo $comment->created_at->diffForHumans(); ?></span>
+
+				<hr />
+
+				<?php echo $comment->content(); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<hr />
+<?php endforeach; ?>
+<?php else: ?>
+<hr />
+<?php endif; ?>
+
+<?php if ( ! Sentry::check()): ?>
+You need to be logged in to add comments.<br /><br />
+Click <a href="<?php echo route('signin'); ?>">here</a> to login into your account.
+<?php else: ?>
+<h4>Add a Comment</h4>
+<form method="post" action="<?php echo route('view-post', $post->slug); ?>">
+	<!-- CSRF Token -->
+	<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+
+	<!-- Comment -->
+	<div class="control-group<?php echo $errors->first('comment', ' error'); ?>">
+		<textarea class="input-block-level" rows="4" name="comment" id="comment"><?php echo Input::old('comment'); ?></textarea>
+		<?php echo $errors->first('comment', '<span class="help-inline">:message</span>'); ?>
+	</div>
+
+	<!-- Form actions -->
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" class="btn" id="submit" value="Submit" />
+		</div>
+	</div>
+</form>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

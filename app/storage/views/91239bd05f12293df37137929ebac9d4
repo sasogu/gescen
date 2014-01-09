@@ -1,0 +1,15 @@
+
+<?php /*  Page title  */ ?>
+<?php $__env->startSection('title'); ?>
+About us ::
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /*  Page content  */ ?>
+<?php $__env->startSection('content'); ?>
+
+About us page.
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('frontend/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
